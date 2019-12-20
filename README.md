@@ -14,7 +14,7 @@ git init --bare $HOME/.dotfiles
 ```
 * create an alias `dotfiles` so you don't need to type it all over again
 ```bash
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ -work-tree=$HOME'
+alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 ```
 
 * set git status to hide untracked files
