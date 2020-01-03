@@ -69,3 +69,4 @@ Everything is combined in the bootstrap file
 ```bash
 bash -c "$(curl -fsSL -u gitolicious https://raw.githubusercontent.com/gitolicious/dotfiles/master/bin/bootstrap.sh)"
 ```
+> Use a [Github Personal Token](https://github.com/settings/tokens) as password for the download of the script.
