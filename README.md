@@ -68,3 +68,4 @@ Awesome! You’re done.
 Everything is combined in the bootstrap file
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/gitolicious/dotfiles/main/bin/bootstrap.sh)"
+```

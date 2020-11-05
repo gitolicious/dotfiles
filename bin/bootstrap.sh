@@ -8,9 +8,11 @@ shopt -s expand_aliases
 # check Linux distribution
 . /etc/os-release
 if [ "$NAME" = "Alpine Linux" ]; then
+    DISTRO="Alpine"
     PKG_UPDATE_CMD="apk update"
     PKG_INSTALL_CMD="apk add"
 elif [ "$NAME" = "Ubuntu" ]; then
+    DISTRO="Ubuntu"
     PKG_UPDATE_CMD="apt update"
     PKG_INSTALL_CMD="apt install -y"
 else
@@ -26,10 +28,10 @@ sudo $PKG_INSTALL_CMD git
 ## dotfiles git repo
 
 # clone dotfiles
-git clone --bare https://github.com/gitolicious/dotfiles.git $HOME/.dotfiles
+[ ! -d "$HOME/.dotfiles" ] && git clone --bare https://github.com/gitolicious/dotfiles.git $HOME/.dotfiles
 
 # create dotfiles alias
-alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+alias dotfiles="$(which git) --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
 
 # checkout dotfiles
 dotfiles checkout
@@ -38,7 +40,7 @@ dotfiles checkout
 ## installations
 
 # zsh
-sudo apt install -y zsh
+sudo $PKG_INSTALL_CMD zsh
 
 # oh-my-zsh
 RUNZSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
@@ -64,13 +66,19 @@ wget -P ~/.local/share/fonts https://github.com/romkatv/dotfiles-public/raw/mast
 wget -P ~/.local/share/fonts https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS%20NF%20Bold.ttf
 wget -P ~/.local/share/fonts https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS%20NF%20Italic.ttf
 wget -P ~/.local/share/fonts https://github.com/romkatv/dotfiles-public/raw/master/.local/share/fonts/NerdFonts/MesloLGS%20NF%20Bold%20Italic.ttf
-sudo apt install -y fontconfig
+sudo $PKG_INSTALL_CMD fontconfig
 sudo fc-cache -f -v
 
 ## other tools
 
-sudo apt install -y python3-dev python3-pip
-sudo -H pip3 install thefuck
+if [ "$DISTRO" = "Alpine" ]; then
+    echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+    $PKG_UPDATE_CMD
+    sudo $PKG_INSTALL_CMD thefuck
+else
+    sudo $PKG_INSTALL_CMD python3-dev python3-pip
+    sudo -H pip3 install thefuck
+fi
 
 
 ## start zsh
