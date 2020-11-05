@@ -3,8 +3,25 @@
 set -e
 shopt -s expand_aliases
 
-sudo apt update
-sudo apt install -y git
+## preparations
+
+# check Linux distribution
+. /etc/os-release
+if [ "$NAME" = "Alpine Linux" ]; then
+    PKG_UPDATE_CMD="apk update"
+    PKG_INSTALL_CMD="apk add"
+elif [ "$NAME" = "Ubuntu" ]; then
+    PKG_UPDATE_CMD="apt update"
+    PKG_INSTALL_CMD="apt install -y"
+else
+    echo "Unknown Linux distribution $NAME"
+    exit 1
+fi
+
+# install necessities
+sudo $PKG_UPDATE_CMD
+sudo $PKG_INSTALL_CMD git
+
 
 ## dotfiles git repo
 
