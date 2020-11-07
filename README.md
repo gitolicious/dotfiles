@@ -65,7 +65,12 @@ Awesome! You’re done.
 
 # Simpler version
 
-Everything is combined in the bootstrap file
+Everything is combined in the bootstrap file for convenience.
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/gitolicious/dotfiles/main/bin/bootstrap.sh)"
+```
+
+This can be used in VS Code Remote Containers by adding the following line to `./devcontainer/devcontainer.json`
+```json
+"postCreateCommand": "bash -c \"$(curl -fsSL https://raw.githubusercontent.com/gitolicious/dotfiles/main/bin/bootstrap.sh)\"",
 ```
