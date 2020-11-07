@@ -7,16 +7,16 @@ shopt -s expand_aliases
 
 # check Linux distribution
 . /etc/os-release
-if [ "$NAME" = "Alpine Linux" ]; then
-    DISTRO="Alpine"
+if [ "$ID" = "alpine" ]; then
+    DISTRO=$ID
     PKG_UPDATE_CMD="apk update"
     PKG_INSTALL_CMD="apk add"
-elif [ "$NAME" = "Ubuntu" ]; then
-    DISTRO="Ubuntu"
+elif [ "$ID" = "ubuntu" ]; then
+    DISTRO=$ID
     PKG_UPDATE_CMD="apt update"
     PKG_INSTALL_CMD="apt install -y"
 else
-    echo "Unknown Linux distribution $NAME"
+    echo "Unknown Linux distribution $ID ($NAME)"
     exit 1
 fi
 
@@ -28,8 +28,8 @@ else
 fi
 
 # install necessities
-sudo $PKG_UPDATE_CMD
-sudo $PKG_INSTALL_CMD git
+$SUDO $PKG_UPDATE_CMD
+$SUDO $PKG_INSTALL_CMD git
 
 
 ## dotfiles git repo
@@ -86,7 +86,7 @@ fi
 ## other tools
 
 # thefuck (https://github.com/nvbn/thefuck)
-if [ "$DISTRO" = "Alpine" ]; then
+if [ "$DISTRO" = "alpine" ]; then
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
     $SUDO $PKG_UPDATE_CMD
     $SUDO $PKG_INSTALL_CMD thefuck
@@ -100,5 +100,5 @@ else
 fi
 
 
-## start zsh
-zsh
+## start zsh (if on interactive shell)
+[[ $- == *i* ]] && zsh
