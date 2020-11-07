@@ -11,7 +11,7 @@ if [ "$ID" = "alpine" ]; then
     DISTRO=$ID
     PKG_UPDATE_CMD="apk update"
     PKG_INSTALL_CMD="apk add"
-elif [ "$ID" = "ubuntu" ]; then
+elif [ "$ID" = "ubuntu" ] || [ "$ID" = "debian" ]; then
     DISTRO=$ID
     PKG_UPDATE_CMD="apt update"
     PKG_INSTALL_CMD="apt install -y"
