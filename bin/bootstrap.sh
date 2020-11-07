@@ -88,11 +88,15 @@ fi
 # thefuck (https://github.com/nvbn/thefuck)
 if [ "$DISTRO" = "Alpine" ]; then
     echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-    $PKG_UPDATE_CMD
+    $SUDO $PKG_UPDATE_CMD
     $SUDO $PKG_INSTALL_CMD thefuck
 else
     $SUDO $PKG_INSTALL_CMD python3-dev python3-pip
-    $SUDO -H pip3 install thefuck
+    if [ ! -z "$SUDO" ]; then
+        $SUDO -H pip3 install thefuck
+    else
+        pip3 install thefuck 
+    fi 
 fi
 
 
