@@ -87,18 +87,17 @@ fi
 
 # thefuck (https://github.com/nvbn/thefuck)
 if [ "$DISTRO" = "alpine" ]; then
-    echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-    $SUDO $PKG_UPDATE_CMD
-    $SUDO $PKG_INSTALL_CMD thefuck
+    $SUDO $PKG_INSTALL_CMD python3-dev py-pip py3-wheel gcc libc-dev linux-headers
 else
     $SUDO $PKG_INSTALL_CMD python3-dev python3-pip
-    if [ ! -z "$SUDO" ]; then
-        $SUDO -H pip3 install thefuck
-    else
-        pip3 install thefuck 
-    fi 
 fi
+
+if [ ! -z "$SUDO" ]; then
+    $SUDO -H pip3 install thefuck
+else
+    pip3 install thefuck 
+fi 
 
 
 ## start zsh (if on interactive shell)
-[[ $- == *i* ]] && zsh
+[[ $- == *i* ]] && zsh || :
