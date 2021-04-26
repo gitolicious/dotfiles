@@ -1,0 +1,229 @@
+{
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "os",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#ffffff",
+          "background_templates": [
+            "{{if contains \"windows\" .OS}}#0077c2{{end}}",
+            "{{if contains \"alpine\" .OS}}#00567e{{end}}",
+            "{{if contains \"debian\" .OS}}#ce0056{{end}}",
+            "{{if contains \"raspbian\" .OS}}#c51a4a{{end}}",
+            "{{if contains \"ubuntu\" .OS}}#e95420{{end}}",
+            "{{if contains \"Ubuntu\" .OS}}#e95420{{end}}",
+            "333333" // fallback gray
+          ],
+          "properties": {
+            "postfix": "\u2800", // invisible spacing character
+            "windows": "\ufab2", // 者
+            "wsl": "",
+            "wsl_separator": "",
+            "ubuntu": "\uf31b " // 
+          }
+        },
+        {
+          "type": "path",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#111111",
+          "background": "#FFDE57",
+          "properties": {
+            "style": "mixed",
+            "mixed_threshold": 6,
+            "enable_hyperlink": true,
+            "home_icon": "\uf015 ", // 
+            "folder_separator_icon": " \u276f ", // ❯
+            "mapped_locations": [
+              [
+                "/",
+                "\ue216" // 
+              ],
+              [
+                "C:\\Windows",
+                "\u2800\ufab2" // 者
+              ],
+              [
+                "/workspaces", // VSCode dev container
+                "\ue70c" // 
+              ],
+              [
+                "/mnt/c",
+                "\ufab2C:" // 者C:
+              ],
+              [
+                "/mnt/d",
+                "\ufab2D:" // 者D:
+              ],
+              [
+                "C:\\temp",
+                "\uf43a" // 
+              ],
+              [
+                "/tmp",
+                "\uf43a" // 
+              ],
+              [
+                "/mnt/c/Users",
+                "\ufab2\uf015" // 者
+              ],
+              [
+                "C:\\scoop",
+                "\ufb13" // ﬓ
+              ],
+              [
+                "D:\\Downloads",
+                "\uf0ed " // 
+              ],
+              [
+                "D:\\dev",
+                "\uf121" // 
+              ],
+              [
+                "/mnt/d/dev",
+                "\ufab2\uf121" // 者
+              ],
+              [
+                "D:\\dev\\github",
+                "\uf113" // 
+              ],
+              [
+                "/mnt/d/dev/github",
+                "\ufab2\uf113" // 者
+              ]
+            ]
+          }
+        },
+        {
+          "type": "root",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#111111",
+          "background": "#33DD2D",
+          "properties": {
+            "root_icon": "\uf0ad" // 
+          }
+        },
+        {
+          "type": "exit",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#ffffff",
+          "background": "#2e9599",
+          "properties": {
+            "error_color": "#f1184c",
+            "color_background": true,
+            "prefix": " \ue23a " // 
+          }
+        },
+        {
+          "type": "exit",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#ffffff",
+          "background": "#2e9599",
+          "properties": {
+            "error_color": "#f1184c",
+            "color_background": true,
+            "prefix": "- ",
+            "always_numeric": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "type": "executiontime",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#ffffff",
+          "background": "#83769c",
+          "properties": {
+            "always_enabled": false,
+            "threshold": 400,
+            "prefix": "\ufa1e", // 羽
+            "postfix": "\u2800" // invisible spacing character
+          }
+        },
+        {
+          "type": "git",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#193549",
+          "background": "#fffb38",
+          "properties": {
+            "display_stash_count": true,
+            "display_upstream_icon": true,
+            "status_colors_enabled": true,
+            "local_changes_color": "#ff9248",
+            "ahead_and_behind_color": "#f26d50",
+            "behind_color": "#f17c37",
+            "ahead_color": "#89d1dc",
+            "stash_count_icon": "\uf692 " // 
+          }
+        },
+        {
+          "type": "node",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#ffffff",
+          "background": "#6CA35E",
+          "properties": {
+            "prefix": " \uf898 ", // 
+            "display_version": false,
+            "display_package_manager": true
+          }
+        },
+        {
+          "type": "go",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#111111",
+          "background": "#8ED1F7",
+          "properties": {
+            "prefix": " \ue626 ", // 
+            "display_version": true
+          }
+        },
+        {
+          "type": "python",
+          "style": "powerline",
+          "powerline_symbol": "\ue0c6", // 
+          "foreground": "#111111",
+          "background": "#FFDE57",
+          "properties": {
+            "prefix": " \ue235 ", // 
+            "display_version": true,
+            "display_mode": "files",
+            "display_virtual_env": false
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "text",
+          "style": "plain",
+          "properties": {
+            "prefix": " ",
+            "text": "<#aaaaaa,transparent>\u276F</>"
+          }
+        }
+      ]
+    }
+  ],
+  "final_space": false,
+  "console_title": true,
+  "console_title_style": "template",
+  "console_title_template": "{{ .Shell }} in {{ .Folder }}"
+}
