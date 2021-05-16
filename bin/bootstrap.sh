@@ -73,8 +73,18 @@ $SUDO $PKG_INSTALL_CMD zsh
 if [ "$DISTRO" = "alpine" ]; then
     # alpine require shadow for chsh
     $SUDO $PKG_INSTALL_CMD shadow
+    if [ -f "/etc/pam.d/chsh" ]; then
+        $SUDO sed s/required/sufficient/g -i /etc/pam.d/chsh
+        REVERT_CHSH_CMD="$SUDO sed s/sufficient/required/g -i /etc/pam.d/chsh"
+    else
+        $SUDO bash -c "echo \"auth       required   pam_shells.so\" > /etc/pam.d/chsh"
+        REVERT_CHSH_CMD="$SUDO rm /etc/pam.d/chsh"
+    fi
 fi
 [[ -x "$(command -v chsh)" && -x "$(command -v zsh)" ]] && $SUDO chsh -s $(which zsh) $(whoami)
+if "$REVERT_CHSH_CMD"; then
+    bash -c "$REVERT_CHSH_CMD"
+fi
 
 # oh-my-zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -94,7 +104,7 @@ ZSH_CUSTOM=${ZSH_CUSTOM:-${ZSH}/custom}
 if [ "$DISTRO" = "alpine" ]; then
     # https://github.com/JanDeDobbeleer/oh-my-posh/issues/379#issuecomment-773706331
     # https://github.com/sgerrand/alpine-pkg-glibc#installing
-    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
+    $SUDO wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
     wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.33-r0/glibc-2.33-r0.apk
     $SUDO $PKG_INSTALL_CMD glibc-2.33-r0.apk
 fi
