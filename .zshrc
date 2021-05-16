@@ -106,8 +106,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-## thefuck
-eval $(thefuck --alias)
+## thefuck (if installed)
+[ -x "$(command -v thefuck)" ] && eval $(thefuck --alias)
 
 ## dotfiles alias
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'

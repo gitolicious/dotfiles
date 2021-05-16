@@ -3,6 +3,13 @@
 set -e
 shopt -s expand_aliases
 
+
+## CLI arguments
+if [[ "$1" = "--fuck-off" || ! -z ${FUCK_OFF+x} ]]; then
+    SKIP_THE_FUCK=true
+fi
+
+
 ## preparations
 
 # check Linux distribution
@@ -27,9 +34,17 @@ else
     SUDO="sudo"
 fi
 
+# on WSL2 check DNS connection problems https://github.com/microsoft/WSL/issues/5256
+if [[ -n "$WSL_DISTRO_NAME" ]] && $SUDO $PKG_UPDATE_CMD | grep -q "Temporary failure resolving"; then
+    echo "Your WSL2 seems to have DNS issues - check https://github.com/microsoft/WSL/issues/5256 or try the following:"
+    [ ! -z "$SUDO" ] && echo "$SUDO bash -c \"echo nameserver 8.8.8.8 >> /etc/resolv.conf\"" ||  echo "echo nameserver 8.8.8.8 >> /etc/resolv.conf"
+    exit 1
+fi
+
+
 # install necessities
 $SUDO $PKG_UPDATE_CMD
-$SUDO $PKG_INSTALL_CMD git
+$SUDO $PKG_INSTALL_CMD git curl wget
 
 
 ## dotfiles git repo
@@ -44,12 +59,22 @@ alias dotfiles="$(which git) --git-dir=\$HOME/.dotfiles/ --work-tree=\$HOME"
 # checkout dotfiles
 dotfiles checkout
 dotfiles pull
+[ ! -f  "$HOME/.zshrc" ] && dotfiles checkout -- .zshrc
+# after git v2.23.0 switch to
+##dotfiles restore $HOME/.zshrc
 
 
 ## installations
 
 # zsh
 $SUDO $PKG_INSTALL_CMD zsh
+
+# set zsh as default shell
+if [ "$DISTRO" = "alpine" ]; then
+    # alpine require shadow for chsh
+    $SUDO $PKG_INSTALL_CMD shadow
+fi
+[[ -x "$(command -v chsh)" && -x "$(command -v zsh)" ]] && $SUDO chsh -s $(which zsh) $(whoami)
 
 # oh-my-zsh
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -64,6 +89,15 @@ ZSH_CUSTOM=${ZSH_CUSTOM:-${ZSH}/custom}
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]     && git clone https://github.com/zsh-users/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-completions" ]         && git clone https://github.com/zsh-users/zsh-completions $ZSH_CUSTOM/plugins/zsh-completions
 [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ] && git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
+
+# oh-my-zsh requires glibc on alpine
+if [ "$DISTRO" = "alpine" ]; then
+    # https://github.com/JanDeDobbeleer/oh-my-posh/issues/379#issuecomment-773706331
+    # https://github.com/sgerrand/alpine-pkg-glibc#installing
+    wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.33-r0/glibc-2.33-r0.apk
+    $SUDO $PKG_INSTALL_CMD glibc-2.33-r0.apk
+fi
 
 # oh-my-posh
 $SUDO wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/posh-linux-amd64 -O /usr/local/bin/oh-my-posh
@@ -82,17 +116,31 @@ fi
 
 ## other tools
 
-# thefuck (https://github.com/nvbn/thefuck)
-if [ "$DISTRO" = "alpine" ]; then
-    $SUDO $PKG_INSTALL_CMD python3-dev py-pip py3-wheel gcc libc-dev linux-headers
-else
-    $SUDO $PKG_INSTALL_CMD python3-dev python3-pip
+if [ ! "$SKIP_THE_FUCK" ]; then
+
+    # thefuck (https://github.com/nvbn/thefuck)
+    if [ "$DISTRO" = "alpine" ]; then
+        $SUDO $PKG_INSTALL_CMD python3-dev py-pip py3-wheel gcc libc-dev linux-headers
+    else
+        $SUDO $PKG_INSTALL_CMD python3-dev python3-pip
+    fi
+
+    if [ ! -z "$SUDO" ]; then
+        $SUDO -H pip3 install thefuck
+    else
+        pip3 install thefuck
+    fi 
+
 fi
 
-if [ ! -z "$SUDO" ]; then
-    $SUDO -H pip3 install thefuck
+## verify installation
+echo "Verifying installation..."
+[ -x "$(command -v zsh)" ]          && echo "zsh OK"        || echo "zsh FAILED"
+[ -x "$(command -v oh-my-posh)" ]   && echo "oh-my-posh OK" || echo "oh-my-posh FAILED"
+if [ ! "$SKIP_THE_FUCK" ]; then
+    [ -x "$(command -v thefuck)" ]  && echo "thefuck OK"    || echo "thefuck FAILED"
 else
-    pip3 install thefuck 
+    echo "thefuck SKIPPED"
 fi 
 
 

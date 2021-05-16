@@ -4,7 +4,7 @@ My Linux dotfiles basic setup.
 The approach was stolen from a [Medium article by Flavio Wuensche
 ](https://medium.com/toutsbrasil/how-to-manage-your-dotfiles-with-git-f7aeed8adf8b) which in turn is based on [Hacker News solution proposed by StreakyCobra](https://news.ycombinator.com/item?id=11070797)
 
-This is highly personalized to my own personal needs but feel free to adapt to yours.
+This is highly personalized to my own personal needs but feel free to adapt to yours. It works with major distributions (tested with Alpine, Ubuntu and Debian) natively, in a Docker container as well as for VS Code devlopment containers.
 
 # Getting started
 
@@ -74,3 +74,5 @@ This can be used in VS Code Remote Containers by adding the following line to `.
 ```json
 "postCreateCommand": "bash -c \"$(curl -fsSL https://raw.githubusercontent.com/gitolicious/dotfiles/main/bin/bootstrap.sh)\"",
 ```
+
+If you don't need [thefuck](https://github.com/nvbn/thefuck), you can save some installation time for its dependencies such as python by adding the `--fuck-off` argument or setting the `FUCK_OFF` environment variable.
