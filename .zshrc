@@ -109,5 +109,8 @@ source $ZSH/oh-my-zsh.sh
 ## thefuck (if installed)
 [ -x "$(command -v thefuck)" ] && eval $(thefuck --alias)
 
+# tmux (if installed), enable UTF-8
+[ -x "$(command -v tmux)" ] && alias tmux='tmux -u'
+
 ## dotfiles alias
 alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'

@@ -124,6 +124,11 @@ if [ $DISPLAY ]; then
     $SUDO fc-cache -f -v
 fi
 
+# tmux
+$SUDO $PKG_INSTALL_CMD tmux
+git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
+$HOME/.tmux/plugins/tpm/bin/install_plugins
+
 ## other tools
 
 if [ ! "$SKIP_THE_FUCK" ]; then
@@ -147,6 +152,7 @@ fi
 echo "Verifying installation..."
 [ -x "$(command -v zsh)" ]          && echo "zsh OK"        || echo "zsh FAILED"
 [ -x "$(command -v oh-my-posh)" ]   && echo "oh-my-posh OK" || echo "oh-my-posh FAILED"
+[ -x "$(command -v tmux)" ]         && echo "tmux OK"       || echo "tmux FAILED"
 if [ ! "$SKIP_THE_FUCK" ]; then
     [ -x "$(command -v thefuck)" ]  && echo "thefuck OK"    || echo "thefuck FAILED"
 else
